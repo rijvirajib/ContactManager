@@ -22,8 +22,22 @@
               android:id="@+id/contactList"
               android:layout_height="wrap_content"
               android:layout_weight="1"/>
-    <Button android:layout_width="fill_parent"
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/importContactsButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/importContactButtonlabel" />
+
+        <Button
             android:id="@+id/addContactButton"
-            android:text="@string/addContactButtonLabel"/>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/addContactButtonLabel" />
+
+    </LinearLayout>
 </LinearLayout>
