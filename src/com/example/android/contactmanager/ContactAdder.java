@@ -172,7 +172,7 @@ public final class ContactAdder extends Activity implements OnAccountsUpdateList
     }
         
     protected void saveContact() {
-    	
+    	String owner_id = mSelectedAccount.getName();
     	String name = mContactNameEditText.getText().toString();
         String phone = mContactPhoneEditText.getText().toString();
         String email = mContactEmailEditText.getText().toString();
@@ -181,8 +181,8 @@ public final class ContactAdder extends Activity implements OnAccountsUpdateList
         int emailType = mContactEmailTypes.get(
                 mContactEmailTypeSpinner.getSelectedItemPosition());
         
-        Contact contact = new Contact(ContactManager.kinveyClient.user().getId(), name, phone, phoneType, email, emailType);
-        ContactManager.kinveyClient.appData("entityCollection", Contact.class).save(contact, new KinveyClientCallback<Contact>() {
+        Contact contact = new Contact(owner_id, name, phone, phoneType, email, emailType);
+        ContactManager.kinveyClient.appData("newCollection", Contact.class).save(contact, new KinveyClientCallback<Contact>() {
             @Override
             public void onSuccess(Contact result) {
                 Toast.makeText(getApplicationContext(),"Entity Saved\nTitle: " + result.getName()

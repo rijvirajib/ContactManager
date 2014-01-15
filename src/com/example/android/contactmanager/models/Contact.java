@@ -11,7 +11,7 @@ import com.kinvey.java.model.KinveyMetaData;
 
 public class Contact extends GenericJson {
 	@Key("_id")
-	private String id;
+	private String _id;
 	@Key
 	private String owner_id;
 	@Key
@@ -40,7 +40,7 @@ public class Contact extends GenericJson {
 	}
 	
 	public String getId() {
-		return this.id;
+		return this._id;
 	}
 	
 	public Contact(){}
@@ -57,6 +57,14 @@ public class Contact extends GenericJson {
 			type = t;
 		}
 		
+		public String getEmail() {
+			return email;
+		}
+		
+		public String getType() {
+			return type;
+		}
+		
 		public Email() {}
 	}
 	
@@ -69,6 +77,14 @@ public class Contact extends GenericJson {
 		public Phone(String p, String t) {
 			phone = p;
 			type = t;
+		}
+		
+		public String getNumber() {
+			return phone;
+		}
+		
+		public String getType() {
+			return type;
 		}
 		
 		public Phone() {}
@@ -94,6 +110,14 @@ public class Contact extends GenericJson {
 	public void addEmail(String email, int type) {
 		Email e = new Email(email, getType(type));
 		this.email.add(e);
+	}
+	
+	public List<Phone> getPhone() {
+		return phone;
+	}
+	
+	public List<Email> getEmail() {
+		return email;
 	}
 	
 	private String getType(int type) {
