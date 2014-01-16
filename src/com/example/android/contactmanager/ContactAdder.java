@@ -21,7 +21,6 @@ import android.accounts.AccountManager;
 import android.accounts.AuthenticatorDescription;
 import android.accounts.OnAccountsUpdateListener;
 import android.app.Activity;
-import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -45,9 +44,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.example.android.contactmanager.models.Contact;
-import com.kinvey.android.Client;
-import com.kinvey.android.callback.KinveyUserCallback;
-import com.kinvey.java.User;
 import com.kinvey.java.core.KinveyClientCallback;
 
 public final class ContactAdder extends Activity implements OnAccountsUpdateListener
@@ -167,7 +163,7 @@ public final class ContactAdder extends Activity implements OnAccountsUpdateList
     private void onSaveButtonClicked() {
         Log.v(TAG, "Save button clicked");
         saveContact();
-        this.setResult(RESULT_OK, null);
+        setResult(RESULT_OK, null);
         finish();
     }
         

@@ -26,6 +26,7 @@ import com.kinvey.java.core.KinveyClientCallback;
 import com.kinvey.java.query.AbstractQuery.SortOrder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,7 +35,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -64,11 +64,15 @@ public final class ContactManager extends Activity {
     private Button mImportContactsButton;
     private ListView mContactList;
     ProgressDialog mProgressDialog;
+    AlertDialog mAlertDialog;
     
     private String appKey="kid_TT9Z901M7O";
     private String appSecret="efbe20c5914849f59c2512d2c2e527e0";
     
     public static Client kinveyClient;
+    
+    public List<Contact> contacts;
+    ContactAdapter mAdapter;
 
     /**
      * Called when the activity is first created. Responsible for initializing the UI.
@@ -92,6 +96,12 @@ public final class ContactManager extends Activity {
 	    mProgressDialog.setMax(100);
 	    mProgressDialog.setProgress(0);
 	    mProgressDialog.setCanceledOnTouchOutside(false);
+	    
+	    mAlertDialog = new AlertDialog.Builder(
+	    		ContactManager.this).create();
+	    mAlertDialog.setTitle("Loading...");
+	    mAlertDialog.setMessage("Please wait...");		
+	    mAlertDialog.setCancelable(false);
         
      // Register handler for UI elements
         mAddAccountButton.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +165,7 @@ public final class ContactManager extends Activity {
     }
     
     public void loadList() {
+    	mAlertDialog.show();
     	Query mQuery = kinveyClient.query();
     	//mQuery.equals("owner_id", kinveyClient.user().getId());
     	mQuery.addSort("name", SortOrder.ASC);
@@ -168,20 +179,22 @@ public final class ContactManager extends Activity {
                                 + "\nPhone: " + contact.get("phone"), Toast.LENGTH_SHORT).show();
                     }
                     */
-                	
-	            	ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(getApplicationContext(),
-	                        android.R.layout.simple_list_item_1, result);
-	            	mContactList.setAdapter(adapter);
-	            	adapter.notifyDataSetChanged();
+                	contacts = Arrays.asList(result);
+	            	//mAdapter = new ArrayAdapter<Contact>(getApplicationContext(), android.R.layout.simple_list_item_1, contacts);
+                	mAdapter = new ContactAdapter(getApplicationContext(), R.layout.contact_row, contacts);
+	            	mContactList.setAdapter(mAdapter);
+	            	mAdapter.notifyDataSetChanged();
                 } else {
                 	Toast.makeText(getApplicationContext(), "No contacts, please import or add a new contact.", Toast.LENGTH_SHORT).show();
                 }
+                mAlertDialog.hide();
             }
 
             @Override
             public void onFailure(Throwable error) {
                 Log.e(TAG, "AppData.get all Failure", error);
                 Toast.makeText(getApplicationContext(), "Get All error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                mAlertDialog.hide();
             }
         });
     }
@@ -277,8 +290,5 @@ public final class ContactManager extends Activity {
 			/* We can update this and show a nice download progress bar */
 			mProgressDialog.setProgress(result[0]);
 		}
-		
 	}
-
-
 }
